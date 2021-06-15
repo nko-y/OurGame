@@ -75,6 +75,12 @@ public class zCameraWork : MonoBehaviour
             OnStartFollowing();
         }
 
+        if(Input.GetMouseButton(1)){  
+            //获取鼠标的偏移量
+            float x = Input.GetAxis("Mouse X");
+            float y = Input.GetAxis("Mouse Y");    
+            bias = bias + new Vector3(x, y, 0);
+        }   
 
         // only follow is explicitly declared
         if (isFollowing)
@@ -114,12 +120,13 @@ public class zCameraWork : MonoBehaviour
     /// </summary>
 
     public Vector3 offset;
+    public Vector3 bias;
     void Follow()
     {
         //cameraTransform.position = Vector3.Lerp(cameraTransform.position, this.transform.position + this.transform.TransformVector(offset), smoothSpeed * Time.deltaTime);
         cameraTransform.position = this.transform.position + offset;
         //cameraTransform.rotation = this.transform.rotation;
-        cameraTransform.LookAt(cameraTransform.position - offset);
+        cameraTransform.LookAt(cameraTransform.position - offset + bias);
         return;
 
         cameraOffset.z = -distance;
