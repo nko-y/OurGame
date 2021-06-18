@@ -92,7 +92,7 @@ MonoBehaviour:
     SynchronizeType: 0
     Name: doReload
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: doDie
   m_SynchronizeLayers:
   - SynchronizeType: 0

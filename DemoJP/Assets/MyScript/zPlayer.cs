@@ -87,6 +87,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         Jump();
         Attack();
         Interation();
+        Die();
     }
 
     void GetInput()
@@ -167,6 +168,15 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
+    void Die()
+    {
+        if (Health <= 0 && !isDead)
+        {
+            isDead = true;
+            anim.SetTrigger("doDie");
+            //PhotonView.Destroy(this.gameObject);
+        }
+    }
 
 
 
