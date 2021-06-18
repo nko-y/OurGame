@@ -203,6 +203,7 @@ MonoBehaviour:
   damage: 0
   isMelee: 0
   isRock: 0
+  life: 600
 --- !u!114 &-5647183549318658219
 MonoBehaviour:
   m_ObjectHideFlags: 0

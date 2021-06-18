@@ -10,21 +10,6 @@ public class zBullet : MonoBehaviourPun
     public bool isMelee;
     public bool isRock;
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (!isRock && collision.gameObject.tag == "Floor")
-        {
-            Destroy(gameObject, 3);
-        }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (!isMelee && other.gameObject.tag == "Wall")
-        {
-            Destroy(gameObject);
-        }
-    }
 
     void OnTriggerStay(Collider other)
     {
@@ -40,5 +25,26 @@ public class zBullet : MonoBehaviourPun
 
             PhotonNetwork.Destroy(this.gameObject);
         }
+        else if(!isMelee && other.gameObject.tag == "Wall")  /* Destroy when collided with wall */
+        {
+            PhotonNetwork.Destroy(this.gameObject);
+        }
     }
+
+
+    /* A bullet can exist for at most 10 sec, after which it will be collected */
+    public int life = 600;
+    void Update()
+    {
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        {
+            return;
+        }
+
+        if(--life == 0){
+            PhotonNetwork.Destroy(this.gameObject);
+        }
+    }
+
+
 }
