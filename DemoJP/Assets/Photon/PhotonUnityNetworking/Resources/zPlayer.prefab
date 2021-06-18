@@ -110,7 +110,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.3619258, y: 1.7187331, z: 1.3695077}
   m_Center: {x: 0.051732976, y: 2.080798, z: 0.041408267}
---- !u!114 &140876401
+--- !u!114 &8583893985257016001
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2777863364604774687}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bf28a6f2f06a8040ac585fc9f960486, type: 3}
+  m_Script: {fileID: 11500000, guid: fba289dbd16cdcc4481bc455b3d4b2bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
@@ -131,6 +131,8 @@ MonoBehaviour:
   trailEffect: {fileID: 5073507009943960856}
   bulletPos: {fileID: 0}
   bullet: {fileID: 0}
+  owner: {fileID: 7701802970420849063}
+  Attribute: 
 --- !u!1 &2898084801965030647
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +304,7 @@ TrailRenderer:
   m_MinVertexDistance: 1.5
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &269786846324542644
+--- !u!114 &4272540237722217209
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -311,19 +313,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 7495025089580683809}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bf28a6f2f06a8040ac585fc9f960486, type: 3}
+  m_Script: {fileID: 11500000, guid: fba289dbd16cdcc4481bc455b3d4b2bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
   damage: 0
   rate: 0.4
-  maxAmmo: 8
-  curAmmo: 8
+  maxAmmo: 20
+  curAmmo: 20
   meleeArea: {fileID: 0}
   trailEffect: {fileID: 0}
   bulletPos: {fileID: 8317001}
-  bullet: {fileID: 4127401287814031526, guid: f0a72dea77cc11a49a2573f244ece6f3, type: 3}
---- !u!114 &1887310386
+  bullet: {fileID: 0}
+  owner: {fileID: 7701802970420849063}
+  Attribute: 
+--- !u!114 &2857447475619550577
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -332,18 +336,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 7671920041662529534}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bf28a6f2f06a8040ac585fc9f960486, type: 3}
+  m_Script: {fileID: 11500000, guid: fba289dbd16cdcc4481bc455b3d4b2bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
   damage: 0
   rate: 0.4
-  maxAmmo: 7
-  curAmmo: 7
+  maxAmmo: 20
+  curAmmo: 20
   meleeArea: {fileID: 0}
   trailEffect: {fileID: 0}
   bulletPos: {fileID: 8317001}
-  bullet: {fileID: 6478737505555307892, guid: 8bd01c8e940b042459f0361ccde89c4a, type: 3}
+  bullet: {fileID: 0}
+  owner: {fileID: 7701802970420849063}
+  Attribute: 
 --- !u!1 &7701802970420849063
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,6 +437,7 @@ MonoBehaviour:
   hasWeapons: 000000
   equipWeapon: {fileID: 0}
   Health: 100
+  Attribute: 
 --- !u!114 &3763137828546738032
 MonoBehaviour:
   m_ObjectHideFlags: 0

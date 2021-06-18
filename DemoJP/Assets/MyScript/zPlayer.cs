@@ -21,6 +21,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     bool sDown1;
     bool sDown2;
     bool sDown3;
+    bool aDown;
 
     bool isJump;
     bool isDodge;
@@ -39,10 +40,11 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     MeshRenderer[] meshs;
 
     GameObject nearObject;
-    public Weapon equipWeapon;
+    public zWeapon equipWeapon;
     int equipWeaponIndex = -1;
 
     public int Health = 100;
+    public string Attribute;
 
     void Awake()
     {
@@ -87,6 +89,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         Jump();
         Attack();
         Interation();
+        GetAttribute();
         Die();
     }
 
@@ -100,6 +103,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         //gDown = Input.GetButtonDown("Fire2");
         //rDown = Input.GetButtonDown("Reload");
         iDown = Input.GetButtonDown("Interation");
+        aDown = Input.GetButtonDown("Attribute");
         //sDown1 = Input.GetButtonDown("Swap1");
         //sDown2 = Input.GetButtonDown("Swap2");
         //sDown3 = Input.GetButtonDown("Swap3");
@@ -154,7 +158,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
                 equipWeaponIndex = weaponIndex;
                 if (equipWeapon != null)
                     equipWeapon.gameObject.SetActive(false);
-                equipWeapon = weapons[weaponIndex].GetComponent<Weapon>();
+                equipWeapon = weapons[weaponIndex].GetComponent<zWeapon>();
                 equipWeapon.gameObject.SetActive(true);
 
                 //Destroy(nearObject);
@@ -164,6 +168,17 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
                 PhotonView p = PhotonView.Get(nearObject);
                 p.RPC("OnDetroyWeaponRPC", RpcTarget.All);
                 
+            }
+        }
+    }
+
+    void GetAttribute()
+    {
+        if (aDown && nearObject != null && !isJump && !isDodge && !isDead)
+        {
+            if (nearObject.activeSelf && (nearObject.tag == "Water" || nearObject.tag == "Fire" || nearObject.tag == "Wind" || nearObject.tag == "Earth"))
+            {
+                Attribute = nearObject.tag;
             }
         }
     }
@@ -192,7 +207,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         if (fDown && isFireReady && !isDodge && !isSwap && !isDead)
         {
             equipWeapon.Use();
-            anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
+            anim.SetTrigger(equipWeapon.type == zWeapon.Type.Melee ? "doSwing" : "doShot");
             fireDelay = 0;
         }
     }
@@ -209,13 +224,13 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
 
     void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Weapon")
+        if (other.tag == "Weapon" || other.tag == "Water" || other.tag == "Fire" || other.tag == "Wind" || other.tag == "Earth")
             nearObject = other.gameObject;
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Weapon")
+        if (other.tag == "Weapon" || other.tag == "Water" || other.tag == "Fire" || other.tag == "Wind" || other.tag == "Earth")
             nearObject = null;
     }
 
