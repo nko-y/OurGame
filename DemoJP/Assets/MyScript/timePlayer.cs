@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class timePlayer : MonoBehaviourPun
+public class timePlayer : MonoBehaviourPun, IPunObservable
 {
     public float speed;
     public GameObject[] weapons;
@@ -39,10 +39,10 @@ public class timePlayer : MonoBehaviourPun
     MeshRenderer[] meshs;
 
     GameObject nearObject;
-    public Weapon equipWeapon;
+    public timeWeapon equipWeapon;
     int equipWeaponIndex = -1;
 
-
+    public int Health = 100;
     // =================== Time Logic ===================
     public Queue<Vector3> historyPos;
     private int FrameCount = 10;
@@ -105,6 +105,7 @@ public class timePlayer : MonoBehaviourPun
         Jump();
         Attack();
         Interation();
+        Die();
     }
 
     void GetInput()
@@ -164,24 +165,38 @@ public class timePlayer : MonoBehaviourPun
     {
         if (iDown && nearObject != null && !isJump && !isDodge && !isDead)
         {
-            if (nearObject.tag == "Weapon")
+            if (nearObject.tag == "Weapon" && nearObject.activeSelf)
             {
                 Item item = nearObject.GetComponent<Item>();
                 int weaponIndex = item.value;
                 hasWeapons[weaponIndex] = true;
 
                 equipWeaponIndex = weaponIndex;
-                Debug.Log(weaponIndex);
                 if (equipWeapon != null)
                     equipWeapon.gameObject.SetActive(false);
-                equipWeapon = weapons[weaponIndex].GetComponent<Weapon>();
+                equipWeapon = weapons[weaponIndex].GetComponent<timeWeapon>();
                 equipWeapon.gameObject.SetActive(true);
 
-                Destroy(nearObject);
+                //Destroy(nearObject);
+
+                nearObject.SetActive(false);
+            
+                PhotonView p = PhotonView.Get(nearObject);
+                p.RPC("OnDetroyWeaponRPC", RpcTarget.All);
+                
             }
         }
     }
 
+    void Die()
+    {
+        if (Health <= 0 && !isDead)
+        {
+            isDead = true;
+            anim.SetTrigger("doDie");
+            //PhotonView.Destroy(this.gameObject);
+        }
+    }
 
     float fireDelay;
     void Attack()
@@ -195,7 +210,7 @@ public class timePlayer : MonoBehaviourPun
         if (fDown && isFireReady && !isDodge && !isSwap && !isDead)
         {
             equipWeapon.Use();
-            anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
+            anim.SetTrigger(equipWeapon.type == timeWeapon.Type.Melee ? "doSwing" : "doShot");
             fireDelay = 0;
         }
     }
@@ -205,8 +220,7 @@ public class timePlayer : MonoBehaviourPun
         FrameCount--;
         if(FrameCount == 0)
         {
-            Vector3 v = historyPos.Dequeue();
-            //Debug.Log(v);
+            historyPos.Dequeue();
             Vector3 pos = transform.position;
             historyPos.Enqueue(pos);
             FrameCount = 10;
@@ -234,6 +248,33 @@ public class timePlayer : MonoBehaviourPun
     {
         if (other.tag == "Weapon")
             nearObject = null;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        GameObject weapon1 = weapons[0].GetComponent<timeWeapon>().gameObject;
+        GameObject weapon2 = weapons[1].GetComponent<timeWeapon>().gameObject;
+        GameObject weapon3 = weapons[2].GetComponent<timeWeapon>().gameObject;
+        if (stream.IsWriting)
+        {
+            stream.SendNext(weapon1.activeSelf);
+            stream.SendNext(weapon2.activeSelf);
+            stream.SendNext(weapon3.activeSelf);
+            stream.SendNext(this.Health);
+        }
+        else
+        {
+            weapon1.SetActive((bool) stream.ReceiveNext());
+            weapon2.SetActive((bool) stream.ReceiveNext());
+            weapon3.SetActive((bool) stream.ReceiveNext());
+            this.Health = (int)stream.ReceiveNext();
+        }
+    }
+
+    [PunRPC]
+    public void OnHealtDecRPC(int dec)
+    {
+        this.Health -= dec;
     }
 }
 
