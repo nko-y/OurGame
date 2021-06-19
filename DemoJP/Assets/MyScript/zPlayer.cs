@@ -52,6 +52,8 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     public int isFreezed = 0;   /* Ice  */
     public int isSlowed = 0;    /* Sand */
     public int isFog = 0;       /* Steam */
+    public int isHeal = 0;      /* Heal */
+    public GameObject HealParticle;
 
     void Awake()
     {
@@ -120,16 +122,19 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
 
     void CheckStatus()
     {
+        // Slow
         if (isSlowed > 0)
         {
             isSlowed--;
         }
 
+        // Freeze
         if (isFreezed > 0)
         {
             isFreezed--;
         }
 
+        // Fog
         if (isFog > 0)
         {
             isFog--;
@@ -140,10 +145,22 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
             if (RenderSettings.fog) RenderSettings.fog = false;
         }
 
+        // Heal
+        if(isHeal > 0)
+        {
+            isHeal--;
+            if (!HealParticle.activeSelf) HealParticle.SetActive(true);
+        }
+        else
+        {
+            if (HealParticle.activeSelf) HealParticle.SetActive(false);
+        }
     }
 
     void Move()
     {
+        if (isFreezed > 0) return;          /* Freeez the character */
+
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
 
         if (isDodge)
@@ -152,9 +169,8 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         if (isSwap || isReload || !isFireReady || isDead)
             moveVec = Vector3.zero;
 
-
         float s = isSlowed > 0 ? (speed / 2) : speed;  /* Half   the speed     */
-        s = isFreezed > 0 ? 0 : s;                     /* Freeez the character */
+        //s = isFreezed > 0 ? 0 : s;                     /* Freeez the character */
 
         if (!isBorder)
             transform.position += moveVec * s * (wDown ? 0.3f : 1f) * Time.deltaTime;

@@ -81,6 +81,7 @@ public class zWeapon : MonoBehaviour
         {
             // Heal
             zp.Health += 5;
+            zp.isHeal = 5 * 60;
         }
         else if (zp.Attribute == "Wind" && this.Attribute == "Water" || zp.Attribute == "Water" && this.Attribute == "Wind")
         {
