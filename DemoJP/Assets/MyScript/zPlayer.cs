@@ -197,6 +197,15 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
 
             //jumpSound.Play();
         }
+        else if (jDown && moveVec != Vector3.zero && !isJump && !isDodge && !isSwap && !isDead)
+        {
+            dodgeVec = moveVec;
+            speed *= 2;
+            anim.SetTrigger("doDodge");
+            isDodge = true;
+
+            Invoke("DodgeOut", 0.5f);
+        }
     }
 
     void Interation()
@@ -245,6 +254,13 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
             anim.SetTrigger("doDie");
             //PhotonView.Destroy(this.gameObject);
         }
+    }
+
+    
+    void DodgeOut()
+    {
+        speed *= 0.5f;
+        isDodge = false;
     }
 
 

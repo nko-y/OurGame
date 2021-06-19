@@ -77,7 +77,7 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: doJump
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: doDodge
   - Type: 9
     SynchronizeType: 0
