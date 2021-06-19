@@ -21,7 +21,7 @@ public class zBullet : MonoBehaviourPun
         if (!isMelee && other.gameObject.tag == "Player")
         {
             PhotonView p = PhotonView.Get(other.gameObject);
-            p.RPC("OnHealtDecRPC", RpcTarget.Others, 20);
+            p.RPC("OnHealtDecRPC", RpcTarget.Others, 20, "");
 
             PhotonNetwork.Destroy(this.gameObject);
         }

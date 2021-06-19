@@ -45,6 +45,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
 
     public int Health = 100;
     public string Attribute;
+    public string name;
 
     void Awake()
     {
@@ -256,8 +257,9 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     }
 
     [PunRPC]
-    public void OnHealtDecRPC(int dec)
+    public void OnHealtDecRPC(int dec, string name)
     {
+        //if (this.name != name) return;
         this.Health -= dec;
     }
 }

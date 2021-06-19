@@ -465,6 +465,7 @@ MonoBehaviour:
   equipWeapon: {fileID: 0}
   Health: 100
   Attribute: 
+  name: 
 --- !u!114 &3763137828546738032
 MonoBehaviour:
   m_ObjectHideFlags: 0

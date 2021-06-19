@@ -6,7 +6,7 @@ using Photon.Realtime;
 
 public class FireBullet : MonoBehaviourPun
 {
-    public int damage;
+    public int damage = 10;
     public bool isMelee;
     public bool isRock;
 
@@ -20,8 +20,19 @@ public class FireBullet : MonoBehaviourPun
 
         if (!isMelee && other.gameObject.tag == "Player")
         {
+            /* Calculate Damage */
+            zPlayer zp = other.gameObject.GetComponent<zPlayer>();
+            if(zp.Attribute == "Wind")
+            {
+                damage *= 2;
+            }
+            else if (zp.Attribute == "Water")
+            {
+                damage /= 2;
+            }
+
             PhotonView p = PhotonView.Get(other.gameObject);
-            p.RPC("OnHealtDecRPC", RpcTarget.Others, 20);
+            p.RPC("OnHealtDecRPC", RpcTarget.Others, damage, zp.name);
 
             PhotonNetwork.Destroy(this.gameObject);
         }
