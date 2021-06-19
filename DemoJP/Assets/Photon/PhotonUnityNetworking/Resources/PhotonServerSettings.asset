@@ -37,6 +37,10 @@ MonoBehaviour:
   - DestroyRpc
   - OnDetroyWeaponRPC
   - OnHealtDecRPC
+  - OnIceFreezeRPC
+  - OnMagmaClearRPC
+  - OnSandSlowRPC
+  - OnSteamFogRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

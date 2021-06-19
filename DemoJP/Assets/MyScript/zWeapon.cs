@@ -61,17 +61,62 @@ public class zWeapon : MonoBehaviour
         }
         else if (zp.Attribute == "Water" && this.Attribute == "Water")
         {
-
+            GameObject intantBullet = PhotonNetwork.Instantiate("WaterBullet", bulletPos.position, bulletPos.rotation, 0);
+            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+            bulletRigid.velocity = bulletPos.forward * 50;
         }
         else if (zp.Attribute == "Wind" && this.Attribute == "Wind")
         {
-
+            GameObject intantBullet = PhotonNetwork.Instantiate("WindBullet", bulletPos.position, bulletPos.rotation, 0);
+            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+            bulletRigid.velocity = bulletPos.forward * 50;
         }
         else if (zp.Attribute == "Earth" && this.Attribute == "Earth")
         {
-
+            GameObject intantBullet = PhotonNetwork.Instantiate("EarthBullet", bulletPos.position, bulletPos.rotation, 0);
+            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+            bulletRigid.velocity = bulletPos.forward * 50;
         }
-        /* ... */
+        else if (zp.Attribute == "Earth" && this.Attribute == "Water" || zp.Attribute == "Water" && this.Attribute == "Earth")
+        {
+            // Heal
+            zp.Health += 5;
+        }
+        else if (zp.Attribute == "Wind" && this.Attribute == "Water" || zp.Attribute == "Water" && this.Attribute == "Wind")
+        {
+            // Ice
+            GameObject intantBullet = PhotonNetwork.Instantiate("IceBullet", bulletPos.position, bulletPos.rotation, 0);
+            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+            bulletRigid.velocity = bulletPos.forward * 50;
+        }
+        else if (zp.Attribute == "Wind" && this.Attribute == "Earth" || zp.Attribute == "Earth" && this.Attribute == "Wind")
+        {
+            // Sand
+            GameObject intantBullet = PhotonNetwork.Instantiate("SandBullet", bulletPos.position, bulletPos.rotation, 0);
+            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+            bulletRigid.velocity = bulletPos.forward * 50;
+        }
+        else if (zp.Attribute == "Wind" && this.Attribute == "Fire" || zp.Attribute == "Fire" && this.Attribute == "Wind")
+        {
+            // Explode
+            GameObject intantBullet = PhotonNetwork.Instantiate("ExplodeBullet", bulletPos.position, bulletPos.rotation, 0);
+            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+            bulletRigid.velocity = bulletPos.forward * 50;
+        }
+        else if (zp.Attribute == "Earth" && this.Attribute == "Fire" || zp.Attribute == "Fire" && this.Attribute == "Earth")
+        {
+            // Magma
+            GameObject intantBullet = PhotonNetwork.Instantiate("MagmaBullet", bulletPos.position, bulletPos.rotation, 0);
+            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+            bulletRigid.velocity = bulletPos.forward * 50;
+        }
+        else if (zp.Attribute == "Water" && this.Attribute == "Fire" || zp.Attribute == "Fire" && this.Attribute == "Water")
+        {
+            // Steam
+            GameObject intantBullet = PhotonNetwork.Instantiate("SteamBullet", bulletPos.position, bulletPos.rotation, 0);
+            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+            bulletRigid.velocity = bulletPos.forward * 50;
+        }
         else
         {
             GameObject intantBullet = PhotonNetwork.Instantiate("greenBullet", bulletPos.position, bulletPos.rotation, 0);

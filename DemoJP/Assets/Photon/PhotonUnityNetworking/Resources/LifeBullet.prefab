@@ -220,10 +220,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4777827490343888823}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea5d4a2387d1e644c9dea22f1a2f83ef, type: 3}
+  m_Script: {fileID: 11500000, guid: b23cde89102da954b8cfc84c448964b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
-  isMelee: 0
-  isRock: 0
-  life: 600

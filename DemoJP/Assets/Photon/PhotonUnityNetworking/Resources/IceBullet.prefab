@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1078760833636225473}
   - component: {fileID: 4959621138496896622}
   - component: {fileID: 4950570912215284073}
+  - component: {fileID: 2860352040029964566}
   m_Layer: 8
   m_Name: IceBullet
   m_TagString: Bullet
@@ -210,3 +211,19 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &2860352040029964566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078760833636225502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed015258585a6a6418336aa48571ff16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10
+  isMelee: 0
+  isRock: 0
+  life: 600

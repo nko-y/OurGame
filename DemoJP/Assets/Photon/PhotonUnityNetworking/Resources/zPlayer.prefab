@@ -119,7 +119,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2777863364604774687}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fba289dbd16cdcc4481bc455b3d4b2bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d18a03782179de48878c4f64eb256b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
@@ -132,7 +132,7 @@ MonoBehaviour:
   bulletPos: {fileID: 0}
   bullet: {fileID: 0}
   owner: {fileID: 7701802970420849063}
-  Attribute: 
+  Attribute: Default
 --- !u!1 &2898084801965030647
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3558423175312575607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fba289dbd16cdcc4481bc455b3d4b2bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d18a03782179de48878c4f64eb256b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
@@ -338,7 +338,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7495025089580683809}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fba289dbd16cdcc4481bc455b3d4b2bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d18a03782179de48878c4f64eb256b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
@@ -361,7 +361,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7671920041662529534}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fba289dbd16cdcc4481bc455b3d4b2bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d18a03782179de48878c4f64eb256b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
@@ -465,7 +465,10 @@ MonoBehaviour:
   equipWeapon: {fileID: 0}
   Health: 100
   Attribute: 
-  name: 
+  playerName: Default
+  isFreezed: 0
+  isSlowed: 0
+  isFog: 0
 --- !u!114 &3763137828546738032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,7 +485,7 @@ MonoBehaviour:
   height: 3
   centerOffset: {x: 0, y: 4, z: 0}
   followOnStart: 0
-  smoothSpeed: 0.125
+  cameraTransform: {fileID: 0}
   offset: {x: 0, y: 21, z: -11}
   bias: {x: 0, y: 0, z: 0}
 --- !u!114 &4133405178350614484
@@ -526,7 +529,7 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &828913979480276574
+--- !u!114 &1037379332159662132
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -535,7 +538,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8983770136404142871}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fba289dbd16cdcc4481bc455b3d4b2bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d18a03782179de48878c4f64eb256b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1

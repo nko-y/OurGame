@@ -32,7 +32,7 @@ public class zCameraWork : MonoBehaviour
 
     [Tooltip("The Smoothing for the camera to follow the target")]
     [SerializeField]
-    private float smoothSpeed = 50.225f;
+    //private float smoothSpeed = 50.225f;
 
 
     // cached transform of the target

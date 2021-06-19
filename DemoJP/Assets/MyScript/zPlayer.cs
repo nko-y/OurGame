@@ -45,11 +45,18 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
 
     public int Health = 100;
     public string Attribute;
-    public string name;
+    public string playerName = "Default";
+
+    /* Status Effect Flags */
+
+    public int isFreezed = 0;   /* Ice  */
+    public int isSlowed = 0;    /* Sand */
+    public int isFog = 0;       /* Steam */
 
     void Awake()
     {
         Application.targetFrameRate = 60;
+        RenderSettings.fog = false;
     }
 
     // Start is called before the first frame update
@@ -67,13 +74,13 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (photonView.IsMine)
             {
-                 _cameraWork.OnStartFollowing();
-             }
-         }
+                _cameraWork.OnStartFollowing();
+            }
+        }
         else
-         {
-             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
-         }
+        {
+            Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
+        }
     }
 
     // Update is called once per frame
@@ -85,6 +92,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         }
 
         GetInput();
+        CheckStatus();
         Move();
         Turn();
         Jump();
@@ -110,6 +118,29 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         //sDown3 = Input.GetButtonDown("Swap3");
     }
 
+    void CheckStatus()
+    {
+        if (isSlowed > 0)
+        {
+            isSlowed--;
+        }
+
+        if (isFreezed > 0)
+        {
+            isFreezed--;
+        }
+
+        if (isFog > 0)
+        {
+            isFog--;
+            if (!RenderSettings.fog) RenderSettings.fog = true;
+        }
+        else
+        {
+            if (RenderSettings.fog) RenderSettings.fog = false;
+        }
+
+    }
 
     void Move()
     {
@@ -121,8 +152,12 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         if (isSwap || isReload || !isFireReady || isDead)
             moveVec = Vector3.zero;
 
+
+        float s = isSlowed > 0 ? (speed / 2) : speed;  /* Half   the speed     */
+        s = isFreezed > 0 ? 0 : s;                     /* Freeez the character */
+
         if (!isBorder)
-            transform.position += moveVec * speed * (wDown ? 0.3f : 1f) * Time.deltaTime;
+            transform.position += moveVec * s * (wDown ? 0.3f : 1f) * Time.deltaTime;
 
         anim.SetBool("isRun", moveVec != Vector3.zero);
         anim.SetBool("isWalk", wDown);
@@ -141,6 +176,8 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
             anim.SetBool("isJump", true);
             anim.SetTrigger("doJump");
             isJump = true;
+
+            RenderSettings.fog = !RenderSettings.fog;
 
             //jumpSound.Play();
         }
@@ -165,10 +202,10 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
                 //Destroy(nearObject);
 
                 nearObject.SetActive(false);
-            
+
                 PhotonView p = PhotonView.Get(nearObject);
                 p.RPC("OnDetroyWeaponRPC", RpcTarget.All);
-                
+
             }
         }
     }
@@ -259,7 +296,36 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     public void OnHealtDecRPC(int dec, string name)
     {
-        //if (this.name != name) return;
+        //if (this.playerName != name) return;
         this.Health -= dec;
+    }
+
+    [PunRPC]
+    public void OnIceFreezeRPC(int time, string name)
+    {
+        //if (this.playerName != name) return;
+        this.isFreezed += time;
+    }
+
+    [PunRPC]
+    public void OnSteamFogRPC(int time, string name)
+    {
+        //if (this.playerName != name) return;
+        this.isFog += time;
+    }
+
+
+    [PunRPC]
+    public void OnSandSlowRPC(int time, string name)
+    {
+        //if (this.playerName != name) return;
+        this.isSlowed += time;
+    }
+
+    [PunRPC]
+    public void OnMagmaClearRPC(string name)
+    {
+        //if (this.playerName != name) return;
+        this.Attribute = "";
     }
 }
