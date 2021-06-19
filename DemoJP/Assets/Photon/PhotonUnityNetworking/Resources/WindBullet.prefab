@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 4777827490343888811}
   - component: {fileID: 4777827490343888808}
   - component: {fileID: 604285745491265543}
-  - component: {fileID: 1160850422121948550}
   - component: {fileID: 577922592062557952}
+  - component: {fileID: 1365549605077697364}
   m_Layer: 8
-  m_Name: greenBullet 2
+  m_Name: WindBullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -188,22 +188,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 0
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &1160850422121948550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4777827490343888823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ac37aa59a7b65641a452e2773349754, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 0
-  isMelee: 0
-  isRock: 0
-  life: 600
 --- !u!114 &577922592062557952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,3 +211,19 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &1365549605077697364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4777827490343888823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea5d4a2387d1e644c9dea22f1a2f83ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10
+  isMelee: 0
+  isRock: 0
+  life: 600

@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 8057574147918684055}
   - component: {fileID: 8057574147918684052}
   - component: {fileID: 2737865978125594683}
-  - component: {fileID: 4431589827895074234}
   - component: {fileID: 2709251351167416124}
+  - component: {fileID: -7581015342340022458}
   m_Layer: 8
   m_Name: EarthBullet
   m_TagString: Bullet
@@ -188,22 +188,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 0
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &4431589827895074234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8057574147918684043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ac37aa59a7b65641a452e2773349754, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 0
-  isMelee: 0
-  isRock: 0
-  life: 600
 --- !u!114 &2709251351167416124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,3 +211,19 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-7581015342340022458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8057574147918684043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2f1193b4349ef94fb240f7d07d66a16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10
+  isMelee: 0
+  isRock: 0
+  life: 600
