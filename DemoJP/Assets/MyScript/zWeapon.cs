@@ -51,9 +51,34 @@ public class zWeapon : MonoBehaviour
     IEnumerator Shot()
     {
         //GameObject intantBullet = Instantiate(bullet, bulletPos.position, bulletPos.rotation);
-        GameObject intantBullet = PhotonNetwork.Instantiate("greenBullet", bulletPos.position, bulletPos.rotation, 0);
-        Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
-        bulletRigid.velocity = bulletPos.forward * 50;
+        zPlayer zp = owner.GetComponent<zPlayer>();
+
+        if (zp.Attribute == "Fire" && this.Attribute == "Fire")
+        {
+            GameObject intantBullet = PhotonNetwork.Instantiate("FireBullet", bulletPos.position, bulletPos.rotation, 0);
+            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+            bulletRigid.velocity = bulletPos.forward * 50;
+        }
+        else if (zp.Attribute == "Water" && this.Attribute == "Water")
+        {
+
+        }
+        else if (zp.Attribute == "Wind" && this.Attribute == "Wind")
+        {
+
+        }
+        else if (zp.Attribute == "Earth" && this.Attribute == "Earth")
+        {
+
+        }
+        /* ... */
+        else
+        {
+            GameObject intantBullet = PhotonNetwork.Instantiate("greenBullet", bulletPos.position, bulletPos.rotation, 0);
+            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+            bulletRigid.velocity = bulletPos.forward * 50;
+        }
+
 
         yield return null;
     }

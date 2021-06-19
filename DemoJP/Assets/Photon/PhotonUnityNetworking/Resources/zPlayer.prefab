@@ -190,7 +190,7 @@ MonoBehaviour:
   bulletPos: {fileID: 8317001}
   bullet: {fileID: 0}
   owner: {fileID: 7701802970420849063}
-  Attribute: 
+  Attribute: Fire
 --- !u!1 &3870240672555612171
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,7 +351,7 @@ MonoBehaviour:
   bulletPos: {fileID: 8317001}
   bullet: {fileID: 0}
   owner: {fileID: 7701802970420849063}
-  Attribute: 
+  Attribute: Water
 --- !u!114 &2857447475619550577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,7 +374,7 @@ MonoBehaviour:
   bulletPos: {fileID: 8317001}
   bullet: {fileID: 0}
   owner: {fileID: 7701802970420849063}
-  Attribute: 
+  Attribute: Wind
 --- !u!1 &7701802970420849063
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,7 +548,7 @@ MonoBehaviour:
   bulletPos: {fileID: 8317001}
   bullet: {fileID: 0}
   owner: {fileID: 7701802970420849063}
-  Attribute: 
+  Attribute: Earth
 --- !u!1001 &30072333195706781
 PrefabInstance:
   m_ObjectHideFlags: 0
