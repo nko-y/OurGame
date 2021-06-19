@@ -25,7 +25,7 @@ public class SteamBullet : MonoBehaviourPun
 
             PhotonView p = PhotonView.Get(other.gameObject);
             p.RPC("OnHealtDecRPC", RpcTarget.Others, damage, zp.name);
-            p.RPC("OnMagmaClearRPC", RpcTarget.Others, zp.name);
+            p.RPC("OnSteamFogRPC", RpcTarget.Others, 5 * 60, zp.name);
 
             PhotonNetwork.Destroy(this.gameObject);
         }
