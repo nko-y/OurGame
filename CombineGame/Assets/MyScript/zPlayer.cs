@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 
 public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
@@ -9,7 +10,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     public GameObject[] weapons;
     public bool[] hasWeapons;
     public int[] weaponMap;   //  from index to weaponIdx
-    public int curWeapon;     //  current index (not weaponIdx)
+    public int curWeapon=0;     //  current index (not weaponIdx)
     public zWeapon equipWeapon;
     int equipWeaponIndex = -1;
 
@@ -34,7 +35,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     bool isFireReady = true;
     bool isBorder;
     bool isDamage;
-    bool isDead;
+    public bool isDead;
 
     Vector3 moveVec;
     Vector3 dodgeVec;
@@ -45,7 +46,10 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
 
     GameObject nearObject;
 
+    public int MaxHealth = 100;
     public int Health = 100;
+    public int MaxPerson;
+    public int myalivePerson;
     public string Attribute;
     public string playerName = "Default";
 
@@ -73,11 +77,19 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     public AudioSource getAttributeSound;
     public AudioSource hitSound;
 
+    /* UI */
+    public GameObject myHealthUI;
+    public GameObject myNameUI;
+
+    public int test=10;
+
     // Awake
     void Awake()
     {
         Application.targetFrameRate = 60;
         RenderSettings.fog = false;
+        myalivePerson = 4;
+        MaxPerson = 4;
     }
 
     // Start is called before the first frame update
@@ -102,6 +114,8 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
         }
+
+        myNameUI.GetComponent<Text>().text = GlobalVariable.UserName;
     }
 
     // Update is called once per frame
@@ -111,17 +125,23 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         {
             return;
         }
-
+        Debug.Log(this.test);
         GetInput();
-        CheckStatus();
-        Move();
-        Turn();
-        Jump();
-        Swap();
-        Attack();
-        Interation();
-        GetAttribute();
-        Die();
+        if (!isDead)
+        {
+            CheckStatus();
+            Move();
+            Turn();
+            Jump();
+            Swap();
+            Attack();
+            Interation();
+            GetAttribute();
+            Die();
+        }
+
+        //¸üÐÂÑªÁ¿UI
+        updateUI();
     }
 
     void GetInput()
@@ -254,6 +274,14 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     void Turn()
     {
         transform.LookAt(transform.position + moveVec);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit rayHit;
+        if (Physics.Raycast(ray, out rayHit, 100))
+        {
+            Vector3 nextVec = rayHit.point - transform.position;
+            nextVec.y = 0;
+            transform.LookAt(transform.position + nextVec);
+        }
     }
 
     void Jump()
@@ -298,7 +326,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
             }
             if(equipWeapon != null)
                 equipWeapon.gameObject.SetActive(false);
-            equipWeapon = weapons[weaponMap[curWeapon]].GetComponent<zWeapon>();
+            equipWeapon = weapons[weaponMap[SceneMgr.nowWeapons[curWeapon - 1]]].GetComponent<zWeapon>();
             equipWeapon.gameObject.SetActive(true);
         }  
     }
@@ -349,9 +377,10 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
             isDead = true;
             anim.SetTrigger("doDie");
             //PhotonView.Destroy(this.gameObject);
+            PhotonView p = PhotonView.Get(this.gameObject);
+            p.RPC("OnPlayerDecRPC", RpcTarget.All);
         }
     }
-
     
     void DodgeOut()
     {
@@ -407,7 +436,6 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     }
 
     // ========================= Serialize Sync ==========================
-
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         GameObject weapon1 = weapons[0];//.GetComponent<Weapon>().gameObject;
@@ -433,6 +461,9 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(this.Health);
             stream.SendNext(this.Attribute);
             stream.SendNext(this.playerName);
+            /* UI Sync*/
+            stream.SendNext(this.Health * 1.0f / this.MaxHealth);
+            stream.SendNext(GlobalVariable.UserName);
         }
         else
         {
@@ -452,7 +483,15 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
             this.Health = (int)stream.ReceiveNext();
             this.Attribute = (string)stream.ReceiveNext();
             this.playerName = (string)stream.ReceiveNext();
+            /* UI Sync*/
+            this.myHealthUI.GetComponent<Slider>().value = (float)stream.ReceiveNext();
+            this.myNameUI.GetComponent<Text>().text = (string)stream.ReceiveNext();
         }
+    }
+
+    void updateUI()
+    {
+        myHealthUI.GetComponent<Slider>().value = Health * 1.0f / MaxHealth;
     }
 
     // ========================= RPC ==========================
@@ -533,5 +572,13 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     {
         //if (this.playerName != name) return;
         this.hitSound.Play();
+    }
+
+    [PunRPC]
+    public void OnPlayerDecRPC()
+    {
+        //if (this.playerName != name) return;
+        this.myalivePerson -= 1;
+        this.test -= 1;
     }
 }

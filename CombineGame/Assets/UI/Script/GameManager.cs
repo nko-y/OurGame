@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     bool hasEnterRoom = false;
     bool canClick = true;
 
+    //ÍË³ö³ÌÐò
+    private int whichPage = 0;
+
     private void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
@@ -36,6 +39,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        whichPage = 0;
         StartPanel.SetActive(true);
         SelectPanel.SetActive(false);
         confirmPanel.SetActive(false);
@@ -50,9 +54,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (whichPage == 0)
+            {
+                Application.Quit();
+            }
+            else if (whichPage == 1)
+            {
+                this.OnclickExit();
+            }
+        }
         if (hasJoinRoom && !hasEnterRoom)
         {
-            waitingPanel.SetActive(true);
             for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
             {
                 NonePerson[i].SetActive(false);
@@ -74,11 +88,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void OnclickExit()
     {
+        whichPage = 1;
         Start();
     }
 
     public void OnClickStartGame()
     {
+        whichPage = 1;
         StartPanel.SetActive(false);
         SelectPanel.SetActive(true);
         Player.SetActive(true);
@@ -111,6 +127,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             NeedWeapon.SetActive(true);
             return;
         }
+        waitingPanel.SetActive(true);
         if (PhotonNetwork.IsConnected)
         {
             PhotonNetwork.JoinRandomRoom();
@@ -141,6 +158,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
+        GlobalVariable.myOrder = PhotonNetwork.CurrentRoom.PlayerCount-1;
         hasJoinRoom = true;
     }
 
