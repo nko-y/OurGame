@@ -23,6 +23,8 @@ public class MagmaBullet : MonoBehaviourPun
             /* Calculate Damage */
             zPlayer zp = other.gameObject.GetComponent<zPlayer>();
 
+            damage *= 3;
+
             PhotonView p = PhotonView.Get(other.gameObject);
             p.RPC("OnHealtDecRPC", RpcTarget.Others, damage, zp.name);
             p.RPC("OnMagmaClearRPC", RpcTarget.Others, zp.name);

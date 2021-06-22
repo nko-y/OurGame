@@ -21,17 +21,21 @@ public class zWeapon : MonoBehaviour
     public GameObject owner;
     public string Attribute;
 
-    public void Use()
+    public void Use(bool Mix = false)
     {
         if (type == Type.Melee)
         {
             StopCoroutine("Swing");
             StartCoroutine("Swing");
         }
-        else if (type == Type.Range && curAmmo > 0)
+        else if (type == Type.Range && curAmmo > 0 && !Mix)
         {
-            curAmmo--;
+            //curAmmo--;
             StartCoroutine("Shot");
+        }
+        else if (type == Type.Range && curAmmo > 0 && Mix)
+        {
+            StartCoroutine("MixShot");
         }
     }
 
@@ -51,36 +55,51 @@ public class zWeapon : MonoBehaviour
     IEnumerator Shot()
     {
         //GameObject intantBullet = Instantiate(bullet, bulletPos.position, bulletPos.rotation);
-        zPlayer zp = owner.GetComponent<zPlayer>();
 
-        if (zp.Attribute == "Fire" && this.Attribute == "Fire" || zp.Attribute == "" && this.Attribute == "Fire" || zp.Attribute == "Fire" && this.Attribute == "")
+        if (this.Attribute == "Fire")
         {
             GameObject intantBullet = PhotonNetwork.Instantiate("FireBullet", bulletPos.position, bulletPos.rotation, 0);
             Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
             bulletRigid.velocity = bulletPos.forward * 50;
         }
-        else if (zp.Attribute == "Water" && this.Attribute == "Water" || zp.Attribute == "" && this.Attribute == "Water" || zp.Attribute == "Water" && this.Attribute == "")
+        else if (this.Attribute == "Water")
         {
             GameObject intantBullet = PhotonNetwork.Instantiate("WaterBullet", bulletPos.position, bulletPos.rotation, 0);
             Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
             bulletRigid.velocity = bulletPos.forward * 50;
         }
-        else if (zp.Attribute == "Wind" && this.Attribute == "Wind" || zp.Attribute == "" && this.Attribute == "Wind" || zp.Attribute == "Wind" && this.Attribute == "")
+        else if (this.Attribute == "Wind")
         {
             GameObject intantBullet = PhotonNetwork.Instantiate("WindBullet", bulletPos.position, bulletPos.rotation, 0);
             Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
             bulletRigid.velocity = bulletPos.forward * 50;
         }
-        else if (zp.Attribute == "Earth" && this.Attribute == "Earth" || zp.Attribute == "" && this.Attribute == "Earth" || zp.Attribute == "Earth" && this.Attribute == "")
+        else if (this.Attribute == "Earth")
         {
             GameObject intantBullet = PhotonNetwork.Instantiate("EarthBullet", bulletPos.position, bulletPos.rotation, 0);
             Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
             bulletRigid.velocity = bulletPos.forward * 50;
         }
-        else if (zp.Attribute == "Earth" && this.Attribute == "Water" || zp.Attribute == "Water" && this.Attribute == "Earth")
+        else
+        {
+            GameObject intantBullet = PhotonNetwork.Instantiate("greenBullet", bulletPos.position, bulletPos.rotation, 0);
+            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+            bulletRigid.velocity = bulletPos.forward * 50;
+        }
+
+
+        yield return null;
+    }
+
+    IEnumerator MixShot()
+    {
+        //GameObject intantBullet = Instantiate(bullet, bulletPos.position, bulletPos.rotation);
+        zPlayer zp = owner.GetComponent<zPlayer>();
+
+        if (zp.Attribute == "Earth" && this.Attribute == "Water" || zp.Attribute == "Water" && this.Attribute == "Earth")
         {
             // Heal
-            zp.Health += 5;
+            zp.Health = (zp.Health + 50) <= 100 ? zp.Health + 50 : 100;
             zp.isHeal = 5 * 60;
         }
         else if (zp.Attribute == "Wind" && this.Attribute == "Water" || zp.Attribute == "Water" && this.Attribute == "Wind")
@@ -118,12 +137,12 @@ public class zWeapon : MonoBehaviour
             Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
             bulletRigid.velocity = bulletPos.forward * 50;
         }
-        else
-        {
-            GameObject intantBullet = PhotonNetwork.Instantiate("greenBullet", bulletPos.position, bulletPos.rotation, 0);
-            Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
-            bulletRigid.velocity = bulletPos.forward * 50;
-        }
+        //else
+        //{
+        //    GameObject intantBullet = PhotonNetwork.Instantiate("greenBullet", bulletPos.position, bulletPos.rotation, 0);
+        //    Rigidbody bulletRigid = intantBullet.GetComponent<Rigidbody>();
+        //    bulletRigid.velocity = bulletPos.forward * 50;
+        //}
 
 
         yield return null;

@@ -23,6 +23,8 @@ public class IceBullet : MonoBehaviourPun
             /* Calculate Damage */
             zPlayer zp = other.gameObject.GetComponent<zPlayer>();
 
+            damage *= 3;
+
             PhotonView p = PhotonView.Get(other.gameObject);
             p.RPC("OnHealtDecRPC", RpcTarget.Others, damage, zp.name);
             p.RPC("OnIceFreezeRPC", RpcTarget.Others, 1 * 60, zp.name);

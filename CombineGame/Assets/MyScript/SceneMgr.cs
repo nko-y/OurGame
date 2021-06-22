@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class SceneMgr : MonoBehaviour
+public class SceneMgr : MonoBehaviourPunCallbacks
 {
     //武器槽
     public GameObject[] weaponSlots = new GameObject[3];
@@ -27,7 +28,14 @@ public class SceneMgr : MonoBehaviour
     //死亡界面
     public GameObject diePanel;
 
+    //获胜界面
+    public GameObject winPanel;
+
+    //物体索引
     public static GameObject LocalPlayerInstance;
+
+    //是否结束回到初始界面
+    private bool isLeaving;
 
     // Start is called before the first frame update
     void Start()
@@ -51,11 +59,15 @@ public class SceneMgr : MonoBehaviour
         }
         //设置初始界面
         diePanel.SetActive(false);
+        winPanel.SetActive(false);
+        //设置初始状态
+        isLeaving = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isLeaving) return;
         int playerCurrentWeapon = LocalPlayerInstance.GetComponent<zPlayer>().curWeapon-1;
         //设置选定武器
         for (int i = 0; i < 3; i++) {
@@ -110,9 +122,40 @@ public class SceneMgr : MonoBehaviour
         aliveText.GetComponent<Text>().text = tempPersonText;
 
         //设置当前界面
-        if (LocalPlayerInstance.GetComponent<zPlayer>().isDead)
+        bool tempIsDead = LocalPlayerInstance.GetComponent<zPlayer>().isDead;
+        if (tempIsDead)
         {
             diePanel.SetActive(true);
         }
+        if(!tempIsDead && tempNowPerson==1)
+        {
+            winPanel.SetActive(true);
+        }
+
+        //判断点击ESC是否直接退出
+        if (LocalPlayerInstance.GetComponent<zPlayer>().sureToLeave)
+        {
+            GameObject[] list = GameObject.FindGameObjectsWithTag("Player");
+            //遍历所有“Player”标签的对象
+            for (int i = 0; i < list.Length; i++)
+            {
+                PhotonView p = PhotonView.Get(list[i]);
+                p.RPC("OnPlayerDecRPC", RpcTarget.All);
+            }
+            this.returnToStart();
+        }
+    }
+
+    
+    //退出当前场景回到开始界面
+    public void returnToStart()
+    {
+        isLeaving = true;
+        PhotonNetwork.LeaveRoom();
+    }
+
+    public override void OnLeftRoom()
+    {
+        SceneManager.LoadScene(0);
     }
 }

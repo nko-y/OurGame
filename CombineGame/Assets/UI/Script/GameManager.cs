@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject NeedWeapon;
     public GameObject[] NonePerson = new GameObject[4];
     public GameObject[] InPerson = new GameObject[4];
+    public AudioSource BGMSource;
     public int NeedPerson = 2;
 
     //连接参数
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     bool hasEnterRoom = false;
     bool canClick = true;
 
-    //退出程序
+    //退出程序,0-起始准备界面,1-开始准备界面,2-等待连接界面
     private int whichPage = 0;
 
     private void Awake()
@@ -64,13 +65,23 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 this.OnclickExit();
             }
+            else if(whichPage == 2)
+            {
+                this.OnClickWhenConnecting();
+            }
         }
         if (hasJoinRoom && !hasEnterRoom)
         {
+            Debug.Log("Now Player Number: "+PhotonNetwork.CurrentRoom.PlayerCount);
             for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
             {
                 NonePerson[i].SetActive(false);
                 InPerson[i].SetActive(true);
+            }
+            for(int i=PhotonNetwork.CurrentRoom.PlayerCount; i<4; i++)
+            {
+                NonePerson[i].SetActive(true);
+                InPerson[i].SetActive(false);
             }
             if (PhotonNetwork.CurrentRoom.PlayerCount == NeedPerson)
             {
@@ -79,6 +90,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 {
                     GlobalVariable.UserWeapon[i] = this.gameObject.GetComponent<AddWeapon>().weaponNum[i];
                 }
+                BGMSource.Stop();
                 PhotonNetwork.LoadLevel("MyJapan");
                 hasEnterRoom = true;
                 canClick = true;
@@ -108,6 +120,20 @@ public class GameManager : MonoBehaviourPunCallbacks
         canClick = true;
     }
 
+    public void OnClickWhenConnecting()
+    {
+        whichPage = 1;
+        waitingPanel.SetActive(false);
+        PhotonNetwork.LeaveRoom();
+        hasJoinRoom = false;
+        canClick = true;
+        for(int i=0; i<4; i++)
+        {
+            NonePerson[i].SetActive(true);
+            InPerson[i].SetActive(false);
+        }
+    }
+
     public void Connect()
     {
         if (canClick == false) return;
@@ -127,10 +153,11 @@ public class GameManager : MonoBehaviourPunCallbacks
             NeedWeapon.SetActive(true);
             return;
         }
+        whichPage = 2;
         waitingPanel.SetActive(true);
         if (PhotonNetwork.IsConnected)
         {
-            PhotonNetwork.JoinRandomRoom();
+            PhotonNetwork.JoinRoom("Room");
         }
         else
         {
@@ -145,7 +172,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (isConnecting)
         {
             Debug.Log("OnConnectedToMaster() was called by PUN");
-            PhotonNetwork.JoinRandomRoom();
+            PhotonNetwork.JoinOrCreateRoom("Room", new Photon.Realtime.RoomOptions { MaxPlayers = maxPlayersPerRoom }, default);
             isConnecting = false;
         }
     }

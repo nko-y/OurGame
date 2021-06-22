@@ -7,7 +7,7 @@ public class zBGM : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //play_stop_music();
+        play_stop_music();
     }
 
     // Update is called once per frame

@@ -27,6 +27,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     bool sDown2;
     bool sDown3;
     bool aDown;
+    bool mDown;
 
     bool isJump;
     bool isDodge;
@@ -48,8 +49,8 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
 
     public int MaxHealth = 100;
     public int Health = 100;
-    public int MaxPerson;
-    public int myalivePerson;
+    public int MaxPerson=4;
+    public int myalivePerson=4;
     public string Attribute;
     public string playerName = "Default";
 
@@ -80,16 +81,13 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     /* UI */
     public GameObject myHealthUI;
     public GameObject myNameUI;
-
-    public int test=10;
+    public bool sureToLeave;
 
     // Awake
     void Awake()
     {
         Application.targetFrameRate = 60;
         RenderSettings.fog = false;
-        myalivePerson = 4;
-        MaxPerson = 4;
     }
 
     // Start is called before the first frame update
@@ -116,6 +114,8 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         }
 
         myNameUI.GetComponent<Text>().text = GlobalVariable.UserName;
+
+        sureToLeave = false;
     }
 
     // Update is called once per frame
@@ -125,16 +125,16 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         {
             return;
         }
-        Debug.Log(this.test);
         GetInput();
+        CheckStatus();
         if (!isDead)
         {
-            CheckStatus();
             Move();
             Turn();
             Jump();
             Swap();
             Attack();
+            MixAttack();
             Interation();
             GetAttribute();
             Die();
@@ -142,6 +142,11 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
 
         //更新血量UI
         updateUI();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            sureToLeave = true;
+        }
     }
 
     void GetInput()
@@ -158,6 +163,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
         sDown3 = Input.GetButtonDown("Swap3");
+        mDown = Input.GetButtonDown("Mix");
     }
 
     void CheckStatus()
@@ -376,9 +382,17 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         {
             isDead = true;
             anim.SetTrigger("doDie");
-            //PhotonView.Destroy(this.gameObject);
-            PhotonView p = PhotonView.Get(this.gameObject);
-            p.RPC("OnPlayerDecRPC", RpcTarget.All);
+            //PhotonView.Destroy(this.gameObject)
+            //PhotonView p = PhotonView.Get(this);
+            //p.RPC("OnPlayerDecRPC", RpcTarget.Others);
+
+            GameObject[] list = GameObject.FindGameObjectsWithTag("Player");
+            //遍历所有“Player”标签的对象
+            for (int i = 0; i < list.Length; i++)
+            {
+                PhotonView p = PhotonView.Get(list[i]);
+                p.RPC("OnPlayerDecRPC", RpcTarget.All);
+            }
         }
     }
     
@@ -394,6 +408,9 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     void Attack()
     {
         if (equipWeapon == null)
+            return;
+
+        if (isHeal > 0)
             return;
 
         fireDelay += Time.deltaTime;
@@ -412,11 +429,35 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         
     }
 
+    float mixDelay;
+    bool isMixReady;
+    float mixRate = 3;
+    void MixAttack()
+    {
+        if (equipWeapon == null)
+            return;
+
+        mixDelay += Time.deltaTime;
+        isMixReady = mixRate < mixDelay;
+
+        if (mDown && isFireReady && isMixReady && !isDodge && !isSwap && !isDead)
+        {
+            equipWeapon.Use(true);
+            anim.SetTrigger(equipWeapon.type == zWeapon.Type.Melee ? "doSwing" : "doShot");
+            mixDelay = 0;
+
+            shootSound.Play();
+            PhotonView p = PhotonView.Get(this);
+            p.RPC("OnPlayShootRPC", RpcTarget.Others);
+        }
+
+    }
+
     // ========================= Callbacks ==========================
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "floor")
+        if (collision.gameObject.tag == "floor" || collision.gameObject.tag == "wall")
         {
             anim.SetBool("isJump", false);
             isJump = false;
@@ -579,6 +620,6 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     {
         //if (this.playerName != name) return;
         this.myalivePerson -= 1;
-        this.test -= 1;
     }
+
 }

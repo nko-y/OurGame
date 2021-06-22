@@ -223,7 +223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13119ce17d6bd354a8b05dfb555834f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
+  damage: 10
   isMelee: 0
   isRock: 0
   life: 600

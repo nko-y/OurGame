@@ -23,6 +23,8 @@ public class SandBullet : MonoBehaviourPun
             /* Calculate Damage */
             zPlayer zp = other.gameObject.GetComponent<zPlayer>();
 
+            damage *= 3;
+
             PhotonView p = PhotonView.Get(other.gameObject);
             p.RPC("OnHealtDecRPC", RpcTarget.Others, damage, zp.name);
             p.RPC("OnSandSlowRPC", RpcTarget.Others, 5 * 60, zp.name);
