@@ -37,6 +37,9 @@ public class SceneMgr : MonoBehaviourPunCallbacks
     //是否结束回到初始界面
     private bool isLeaving;
 
+    //冷却条
+    public GameObject coolingStrip;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -84,6 +87,7 @@ public class SceneMgr : MonoBehaviourPunCallbacks
 
         //设定当前的属性
         string playerCurrentAttr = LocalPlayerInstance.GetComponent<zPlayer>().Attribute;
+        bool tempHasElem = true;
         if (playerCurrentAttr == "Fire")
         {
             attrSlot.GetComponent<Image>().sprite = attrSprite[0];
@@ -107,6 +111,7 @@ public class SceneMgr : MonoBehaviourPunCallbacks
         else
         {
             attrSlot.SetActive(false);
+            tempHasElem = false;
         }
 
         //设置当前血量
@@ -143,6 +148,23 @@ public class SceneMgr : MonoBehaviourPunCallbacks
                 p.RPC("OnPlayerDecRPC", RpcTarget.All);
             }
             this.returnToStart();
+        }
+
+        //更新当前技能冷却条
+        zWeapon tempWeapon = LocalPlayerInstance.GetComponent<zPlayer>().equipWeapon;
+        if (tempWeapon != null && tempHasElem)
+        {
+            if (LocalPlayerInstance.GetComponent<zPlayer>().isMixReady)
+            {
+                coolingStrip.GetComponent<Image>().fillAmount = 0;
+            }
+            else
+            {
+                float tempfireDelay = LocalPlayerInstance.GetComponent<zPlayer>().mixDelay;
+                float tempAllDelay = LocalPlayerInstance.GetComponent<zPlayer>().mixRate;
+                if (tempfireDelay > tempAllDelay) tempfireDelay = tempAllDelay;
+                coolingStrip.GetComponent<Image>().fillAmount = 1 - tempfireDelay / tempAllDelay;
+            }
         }
     }
 

@@ -33,7 +33,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
     bool isDodge;
     bool isSwap;
     bool isReload;
-    bool isFireReady = true;
+    public bool isFireReady = true;
     bool isBorder;
     bool isDamage;
     public bool isDead;
@@ -404,7 +404,7 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
 
 
 
-    float fireDelay;
+    public float fireDelay;
     void Attack()
     {
         if (equipWeapon == null)
@@ -429,9 +429,9 @@ public class zPlayer : MonoBehaviourPunCallbacks, IPunObservable
         
     }
 
-    float mixDelay;
-    bool isMixReady;
-    float mixRate = 3;
+    public float mixDelay;
+    public bool isMixReady;
+    public float mixRate = 3;
     void MixAttack()
     {
         if (equipWeapon == null)

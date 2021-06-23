@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject SelectPanel;
     public GameObject confirmPanel;
     public GameObject waitingPanel;
+    public GameObject explainPanel;
     public GameObject Player;
     public GameObject InputText;
     public GameObject NeedName;
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         SelectPanel.SetActive(false);
         confirmPanel.SetActive(false);
         waitingPanel.SetActive(false);
+        explainPanel.SetActive(false);
         Player.SetActive(false);
         for(int i=0; i<4; i++)
         {
@@ -134,6 +136,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void OnClickHelp()
+    {
+        explainPanel.SetActive(true);
+    }
+
+    public void OnClickExitHelp()
+    {
+        explainPanel.SetActive(false);
+    }
+
     public void Connect()
     {
         if (canClick == false) return;
@@ -165,7 +177,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             PhotonNetwork.GameVersion = gameVersion;
         }
     }
-
 
     public override void OnConnectedToMaster()
     {

@@ -1169,6 +1169,7 @@ MonoBehaviour:
   weaponMap: 03000000020000000400000001000000
   curWeapon: 0
   equipWeapon: {fileID: 0}
+  isFireReady: 1
   isDead: 0
   MaxHealth: 100
   Health: 100
@@ -1196,6 +1197,10 @@ MonoBehaviour:
   myHealthUI: {fileID: 5924374066952800857}
   myNameUI: {fileID: 650255259144150443}
   sureToLeave: 0
+  fireDelay: 0
+  mixDelay: 0
+  isMixReady: 0
+  mixRate: 3
 --- !u!114 &3763137828546738032
 MonoBehaviour:
   m_ObjectHideFlags: 0
